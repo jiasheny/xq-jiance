@@ -35,18 +35,18 @@ jobs:
       - name: 4. Prepare config.ini using Secrets
         run: |
           cat << EOF > config.ini
-[default]
-xq_a_token = ${{ secrets.XQ_A_TOKEN }}
-u = ${{ secrets.U_COOKIE }}
-sct_send_key = ${{ secrets.SCT_KEY }}
-wecom_webhook = ${{ secrets.WECOM_WEBHOOK }}
-xq_id_token =
-xq_r_token =
+          [default]
+          xq_a_token = ${{ secrets.XQ_A_TOKEN }}
+          u = ${{ secrets.U_COOKIE }}
+          sct_send_key = ${{ secrets.SCT_KEY }}
+          wecom_webhook = ${{ secrets.WECOM_WEBHOOK }}
+          xq_id_token =
+          xq_r_token =
 
-[notify_mapping]
-ZH1004909 =
-ZH3540811 =
-EOF
+          [notify_mapping]
+          ZH1004909 =
+          ZH3540811 =
+          EOF
 
       - name: 5. Initialize processed_ids.json if missing
         run: |
