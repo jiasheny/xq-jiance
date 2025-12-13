@@ -46,6 +46,8 @@ jobs:
           [notify_mapping]
           ZH1004909 =
           ZH3540811 =
+          ZH3489231 =
+          ZH005186 =
           EOF
 
       - name: 5. Initialize processed_ids.json if missing
