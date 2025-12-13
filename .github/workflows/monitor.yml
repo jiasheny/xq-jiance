@@ -37,7 +37,6 @@ xq_id_token =
 xq_r_token = 
 
 [notify_mapping]
-# ***** 请确保这里的格式与 config.ini 保持一致 *****
 ZH1004909 = 
 ZH3540811 = 
 EOF
