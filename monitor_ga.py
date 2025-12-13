@@ -78,7 +78,7 @@ UTC = timezone.utc
 SHANGHAI_TZ = pytz.timezone('Asia/Shanghai')
 
 # --- 3. 交易时间判断逻辑 (新增) ---
-def is_trading_time(now):
+#def is_trading_time(now):
     """判断当前时间是否在 A 股交易时间 (9:30-11:30, 13:00-15:00)"""
   #  if now.weekday() >= 5: return False # 0-4 是周一到周五
     current_time = now.time()
