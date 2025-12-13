@@ -236,9 +236,9 @@ if __name__ == '__main__':
     print(f"\u5f53\u524d\u65f6\u95f4 {now_shanghai.strftime('%Y.%m.%d %H:%M:%S')}") # 当前时间
 
     # ***** 关键修正：检查是否在交易时间 *****
-  #  if not is_trading_time(now_shanghai):
-   #     print("\u8df3\u8fc7\u76d1\u6d4b\uff1a\u975e\u4ea4\u6613\u65f6\u95f4") # 跳过监测：非交易时间
-   #     sys.exit(0)
+    if not is_trading_time(now_shanghai):
+        print("\u8df3\u8fc7\u76d1\u6d4b\uff1a\u975e\u4ea4\u6613\u65f6\u95f4") # 跳过监测：非交易时间
+        sys.exit(0)
 
     try:
         print(">>> \u6b63\u5728\u4ea4\u6613\u65f6\u95f4\uff0c\u5f00\u59cb\u67e5\u8be2...") # 正在交易时间，开始查询
