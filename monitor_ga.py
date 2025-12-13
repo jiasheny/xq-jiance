@@ -96,14 +96,14 @@ def format_timestamp_with_timezone_adjustment(timestamp, hours=0):
     return dt_obj.astimezone(SHANGHAI_TZ).strftime('%Y.%m.%d %H:%M:%S')
 
 def send_wecom_message(title, content):
-    """发送企业微信群机器人 Markdown 消息"""
+    """发送企业微信群机器人 Text 消息"""
     if not wecom_webhook: return
     
-    # 将文本内容转换为 Markdown 格式
-    markdown_content = f"## \u96ea\u7403\u7ec4\u5408\u65b0\u8c03\u4ed3\n" 
-    markdown_content += content.replace('\n', '\n>') 
+    # 将标题和内容合并，适合 Text 格式
+    text_content = f"{title}\n\n{content}"
     
-    data = { "msgtype": "markdown", "markdown": { "content": markdown_content } }
+    # 更改 msgtype 为 text，并使用 text 字段
+    data = { "msgtype": "text", "text": { "content": text_content } }
     
     try:
         response = requests.post(wecom_webhook, headers={'Content-Type': 'application/json'}, json=data, timeout=10)
@@ -209,7 +209,7 @@ def monitor_rebalancing_operations():
                 
                 if wecom_webhook:
                     wecom_title = f"\u96ea\u7403\u7ec4\u5408\u65b0\u8c03\u4ed3\uff1a{name}"
-                    send_wecom_message(wecom_title, content)
+                    send_wecom_message(wecom_title, content) # 使用新的 Text 格式函数
 
                 # 6. 保存状态
                 save_processed_ids()
@@ -227,7 +227,7 @@ def monitor_rebalancing_operations():
                     wecom_content = f"**\u9519\u8bef\u4ee3\u7801:** 400016\n**\u8bf7\u6c42\u7ec4\u5408:** {cube_id}\n**\u63d0\u793a:** \u8bf7\u7acb\u5373\u66f4\u65b0 GitHub Secrets \u4e2d\u7684 `XQ_A_TOKEN` \u548c `U_COOKIE`\u3002"
                     
                     if wecom_webhook:
-                        send_wecom_message(wecom_title, wecom_content)
+                        send_wecom_message(wecom_title, wecom_content) # 使用新的 Text 格式函数
                         cookie_expired_notified = True 
 
 # --- 6. 主程序入口 ---
@@ -235,13 +235,13 @@ if __name__ == '__main__':
     now_shanghai = datetime.now(SHANGHAI_TZ)
     print(f"\u5f53\u524d\u65f6\u95f4 {now_shanghai.strftime('%Y.%m.%d %H:%M:%S')}") # 当前时间
 
-    # ***** 关键修正：检查是否在交易时间 *****
-    #if not is_trading_time(now_shanghai):
-    #    print("\u8df3\u8fc7\u76d1\u6d4b\uff1a\u975e\u4ea4\u6613\u65f6\u95f4") # 跳过监测：非交易时间
-    #    sys.exit(0)
+    # ***** 关键修正：检查是否在交易时间 (非交易时间测试时请注释掉以下三行) *****
+    # if not is_trading_time(now_shanghai):
+    #     print("\u8df3\u8fc7\u76d1\u6d4b\uff1a\u975e\u4ea4\u6613\u65f6\u95f4") # 跳过监测：非交易时间
+    #     sys.exit(0)
 
     try:
-        print(">>> \u6b63\u5728\u4ea4\u6613\u65f6\u95f4\uff0c\u5f00\u59cb\u67e5\u8be2...") # 正在交易时间，开始查询
+        print(">>> \u5f00\u59cb\u67e5\u8be2\u7ec4\u5408\u8c03\u4ed3...") # 正在查询
         monitor_rebalancing_operations()
     except Exception as e:
         print(f"Job Error: {e}")
