@@ -78,15 +78,15 @@ UTC = timezone.utc
 SHANGHAI_TZ = pytz.timezone('Asia/Shanghai')
 
 # --- 3. 交易时间判断逻辑 (新增) ---
-#def is_trading_time(now):
+def is_trading_time(now):
     """判断当前时间是否在 A 股交易时间 (9:30-11:30, 13:00-15:00)"""
-  #  if now.weekday() >= 5: return False # 0-4 是周一到周五
+    if now.weekday() >= 5: return False # 0-4 是周一到周五
     current_time = now.time()
     # 上午交易时间
-   # if dtime(9, 30) <= current_time <= dtime(11, 30): return True
+    if dtime(9, 30) <= current_time <= dtime(11, 30): return True
     # 下午交易时间
-  #  if dtime(13, 0) <= current_time <= dtime(15, 0): return True
-  #  return False
+    if dtime(13, 0) <= current_time <= dtime(15, 0): return True
+    return False
 
 # --- 4. 辅助函数 ---
 def format_timestamp_with_timezone_adjustment(timestamp, hours=0):
@@ -236,9 +236,9 @@ if __name__ == '__main__':
     print(f"\u5f53\u524d\u65f6\u95f4 {now_shanghai.strftime('%Y.%m.%d %H:%M:%S')}") # 当前时间
 
     # ***** 关键修正：检查是否在交易时间 *****
-    if not is_trading_time(now_shanghai):
-        print("\u8df3\u8fc7\u76d1\u6d4b\uff1a\u975e\u4ea4\u6613\u65f6\u95f4") # 跳过监测：非交易时间
-        sys.exit(0)
+  #  if not is_trading_time(now_shanghai):
+   #     print("\u8df3\u8fc7\u76d1\u6d4b\uff1a\u975e\u4ea4\u6613\u65f6\u95f4") # 跳过监测：非交易时间
+   #     sys.exit(0)
 
     try:
         print(">>> \u6b63\u5728\u4ea4\u6613\u65f6\u95f4\uff0c\u5f00\u59cb\u67e5\u8be2...") # 正在交易时间，开始查询
