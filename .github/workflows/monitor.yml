@@ -1,0 +1,63 @@
+name: Snowball Monitor (5-Minute WeCom Check)
+
+on:
+  schedule:
+    # UTC 1:00-7:00 对应 CST 9:00-15:00，每 5 分钟运行一次
+    - cron: '*/5 1-7 * * 1-5' 
+  workflow_dispatch:
+
+jobs:
+  monitor_job:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4 
+
+    steps:
+      - name: 1. Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          # 允许工作流提交 processed_ids.json
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: 2. Set up Python 3.8
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.8'
+
+      - name: 3. Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: 4. Prepare config.ini using Secrets
+        # 动态生成 config.ini，注入敏感信息
+        run: |
+          cat << EOF > config.ini
+[default]
+xq_a_token = ${{ secrets.XQ_A_TOKEN }}
+u = ${{ secrets.U_COOKIE }}
+sct_send_key = ${{ secrets.SCT_KEY }}
+wecom_webhook = ${{ secrets.WECOM_WEBHOOK }}
+xq_id_token = 
+xq_r_token = 
+
+[notify_mapping]
+# ***** 请务必在这里手动粘贴您 config.ini 中的 [notify_mapping] 部分 *****
+# 示例:
+ZH1004909 = 
+ZH3540811 = 
+EOF
+
+      - name: 5. Initialize processed_ids.json if missing
+        # 确保 processed_ids.json 存在，如果不存在则创建空文件
+        run: |
+          if [ ! -f processed_ids.json ]; then
+            echo "[]" > processed_ids.json
+          fi
+
+      - name: 6. Run Monitor Script
+        run: python monitor_ga.py
+        
+      - name: 7. Commit updated processed_ids.json
+        # 自动提交更新后的 ID 列表，以保持状态
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Auto: Update processed IDs after monitor run."
+          file_pattern: processed_ids.json
