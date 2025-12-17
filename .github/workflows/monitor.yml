@@ -3,7 +3,7 @@ name: Snowball Monitor (5-Minute WeCom Check)
 on:
   schedule:
     # UTC 1:00-7:00 对应 CST 9:00-15:00，工作日每 5 分钟
-    - cron: '*/5 1-7 * * 1-5'
+    - cron: '*/30 1-7 * * 1-5'
   workflow_dispatch:
 
 jobs:
