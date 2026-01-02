@@ -1,4 +1,4 @@
-name: Snowball Monitor (5-Minute WeCom Check)
+name: Snowball Monitor (30-Minute WeCom Check)
 
 on:
   schedule:
